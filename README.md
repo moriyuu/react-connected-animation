@@ -9,7 +9,7 @@
 
 ## ToDo
 
-- [x] create mock
+- [x] create sample
 - [ ] fire animation when go back to the page
 - [ ] remove styled-components
 - [ ] generalize & publish as a package
