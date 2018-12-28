@@ -3,14 +3,37 @@ import styled, { keyframes, css } from "styled-components";
 import { PositionContext } from "../contexts";
 
 export default function PostsShow(props) {
-  const { getStart } = useContext(PositionContext);
+  const { getStart, setStart } = useContext(PositionContext);
 
   useEffect(() => scrollTo(0, 0));
+
+  const back = () => {
+    props.history.goBack();
+    setStart("head", {
+      width: "100%",
+      height: "480px",
+      left: 0,
+      top: 0
+    });
+    setStart("main", {
+      height: "400px"
+    });
+    setStart("title", {
+      fontSize: "40px",
+      padding: "20px"
+    });
+    setStart("belt", {
+      height: "80px",
+      fontSize: "20px",
+      padding: "16px 40px"
+    });
+  };
 
   return (
     <>
       <Head
         headStartStyle={getStart("head")}
+        mainStartStyle={getStart("main")}
         titleStartStyle={getStart("title")}
         beltStartStyle={getStart("belt")}
       >
@@ -20,6 +43,9 @@ export default function PostsShow(props) {
             <br />
             期間限定イベント
           </h1>
+          <a href="#" onClick={back}>
+            戻る
+          </a>
         </div>
         <div className="belt">ハッピーニューイヤー！</div>
       </Head>
@@ -157,13 +183,14 @@ const Head = styled.div`
   position: absolute;
   background: center / cover url(${require("../assets/images/img.jpg")});
   width: 100%;
-  height: 400px;
+  height: 480px;
   left: 0;
   top: 0;
   ${p => animation(p.headStartStyle)};
 
   .main {
-    height: 100%;
+    height: 400px;
+    ${p => animation(p.mainStartStyle)};
 
     h1 {
       color: #fff;
@@ -194,4 +221,7 @@ const Content = styled.div`
 const animation = (startStyle: any) => css`
   animation: ${mykeyframe(startStyle)} 0.3s cubic-bezier(0.49, 1.26, 0.99, 0.99);
 `;
-const mykeyframe = (startStyle: any) => keyframes({ "0%": { ...startStyle } });
+const mykeyframe = (startStyle: any) =>
+  keyframes({
+    "0%": { ...startStyle }
+  });
