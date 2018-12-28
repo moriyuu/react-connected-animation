@@ -6,7 +6,7 @@ import "../assets/style/postsList.css";
 import { PositionContext } from "../contexts";
 
 export default function PostsList() {
-  const { getStart, setStart } = useContext(PositionContext);
+  const { getStart, setStart, getEnd } = useContext(PositionContext);
   const click = e => {
     setStart("head", {
       width: e.target.offsetWidth + "px",
@@ -24,51 +24,63 @@ export default function PostsList() {
     setStart("belt", {
       height: "40px",
       fontSize: "16px",
-      padding: "0 16px"
+      padding: "0 16px",
+      backgroundColor: "#2251d1"
     });
   };
 
   return (
-    <>
-      <h1>List</h1>
+    <div style={{ width: "80%", margin: "auto" }}>
+      <h1>Item List</h1>
       <ul>
-        {new Array(20).fill(1).map((x, i) => (
+        {new Array(19).fill(1).map((x, i) => (
           <Item
             key={i}
+            num={i + 1}
             click={click}
             headStartStyle={getStart("head")}
+            headEndStyle={getEnd("head")}
+            mainStartStyle={getStart("main")}
             titleStartStyle={getStart("title")}
             beltStartStyle={getStart("belt")}
           />
         ))}
       </ul>
-    </>
+    </div>
   );
 }
 
 function Item({
+  num,
   click,
   headStartStyle,
+  headEndStyle,
+  mainStartStyle,
   titleStartStyle,
   beltStartStyle
 }: {
+  num: number | string;
   click(e: Event): void;
-  headStartStyle: CSSProperties;
-  titleStartStyle: CSSProperties;
-  beltStartStyle: CSSProperties;
+  headStartStyle?: CSSProperties;
+  headEndStyle?: CSSProperties;
+  mainStartStyle?: CSSProperties;
+  titleStartStyle?: CSSProperties;
+  beltStartStyle?: CSSProperties;
 }) {
   return (
     <ItemWrapper
       headStartStyle={headStartStyle}
+      headEndStyle={headEndStyle}
+      mainStartStyle={mainStartStyle}
       titleStartStyle={titleStartStyle}
       beltStartStyle={beltStartStyle}
     >
-      <Link to="/foo" onClick={click}>
+      <Link to={`/${num}`} onClick={click}>
         <div className="main">
           <h2>
             人気ゲームタイトルの
             <br />
-            期間限定イベント
+            期間限定イベント&nbsp;{num}
           </h2>
         </div>
         <div className="belt">メリークリスマス！</div>
@@ -77,19 +89,24 @@ function Item({
   );
 }
 const ItemWrapper = styled.li`
-  width: 30%;
-  margin: 0 1.5% 60px;
-  ${p => animation(p.headStartStyle)};
+  background: no-repeat center / cover
+    url(${require("../assets/images/img.jpg")});
+  width: calc(33.33333% - 14px);
+  margin: 0 7px 60px;
+  ${p =>
+    animation(
+      p.headStartStyle ? { ...p.headStartStyle, position: "absolute" } : {},
+      p.headEndStyle ? { ...p.headEndStyle, position: "absolute" } : {}
+    )};
 
   a {
     text-decoration: none;
   }
 
   .main {
-    background: no-repeat center / cover
-      url(${require("../assets/images/img.jpg")});
     height: 200px;
     width: 100%;
+    ${p => animation(p.mainStartStyle)};
 
     h2 {
       padding: 16px;
@@ -102,7 +119,7 @@ const ItemWrapper = styled.li`
   }
 
   .belt {
-    background-color: tomato;
+    background-color: #2251d1;
     color: #fff;
     height: 40px;
     font-size: 16px;
@@ -111,10 +128,12 @@ const ItemWrapper = styled.li`
   }
 `;
 
-const animation = (startStyle: any) => css`
-  animation: ${mykeyframe(startStyle)} 3s cubic-bezier(0.49, 1.26, 0.99, 0.99);
+const animation = (startStyle: CSSProperties, endStyle?: CSSProperties) => css`
+  animation: ${mykeyframe(startStyle, endStyle)} 0.6s
+    cubic-bezier(0.63, -0.35, 0.33, 1.19);
 `;
-const mykeyframe = (startStyle: any) =>
+const mykeyframe = (startStyle: CSSProperties, endStyle?: CSSProperties) =>
   keyframes({
-    "0%": { ...startStyle }
+    "0%": { ...startStyle },
+    "100%": { ...endStyle }
   });

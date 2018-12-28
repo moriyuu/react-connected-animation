@@ -1,14 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, CSSProperties } from "react";
 
 type State = {
   [key: string]: {
-    start: {
-      width?: number;
-      height?: number;
-      x?: number;
-      y?: number;
-      fontSize?: number;
-    };
+    start: CSSProperties;
+    end: CSSProperties;
   };
 };
 
@@ -16,16 +11,30 @@ export function useConnectedAnimation() {
   const [state, update] = useState<State>({});
 
   useEffect(() => {
-    console.log("state", state.head && state.head.start);
+    // console.log("state st", state.head && state.head.start);
+    // console.log("state en", state.head && state.head.end);
   });
 
   const getStart = (key: string) => {
-    if (!state[key]) return {};
+    if (!state[key]) return undefined;
     return state[key].start;
   };
   const setStart = (key: string, payload: Object) => {
-    update(_state => ({ ..._state, [key]: { start: payload } }));
+    update(_state => ({
+      ..._state,
+      [key]: { ..._state[key], start: payload }
+    }));
+  };
+  const getEnd = (key: string) => {
+    if (!state[key]) return undefined;
+    return state[key].end;
+  };
+  const setEnd = (key: string, payload: Object) => {
+    update(_state => ({
+      ..._state,
+      [key]: { ..._state[key], end: payload }
+    }));
   };
 
-  return { getStart, setStart };
+  return { getStart, setStart, getEnd, setEnd };
 }

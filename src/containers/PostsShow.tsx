@@ -3,17 +3,19 @@ import styled, { keyframes, css } from "styled-components";
 import { PositionContext } from "../contexts";
 
 export default function PostsShow(props) {
-  const { getStart, setStart } = useContext(PositionContext);
+  const { getStart, setStart, setEnd } = useContext(PositionContext);
 
   useEffect(() => scrollTo(0, 0));
 
   const back = () => {
     props.history.goBack();
+    setEnd("head", { ...getStart("head") });
     setStart("head", {
       width: "100%",
       height: "480px",
       left: 0,
-      top: 0
+      top: 0,
+      margin: 0
     });
     setStart("main", {
       height: "400px"
@@ -25,7 +27,8 @@ export default function PostsShow(props) {
     setStart("belt", {
       height: "80px",
       fontSize: "20px",
-      padding: "16px 40px"
+      padding: "16px 40px",
+      backgroundColor: "#237ad1"
     });
   };
 
@@ -41,17 +44,19 @@ export default function PostsShow(props) {
           <h1>
             人気ゲームタイトルの
             <br />
-            期間限定イベント
+            期間限定イベント&nbsp;{props.match.params.id}
           </h1>
-          <a href="#" onClick={back}>
-            戻る
-          </a>
         </div>
         <div className="belt">ハッピーニューイヤー！</div>
       </Head>
       <Content
         contentStartStyle={{ opacity: 0, maxHeight: 0, margin: "40px 0 0 0" }}
       >
+        <h3>
+          <a href="#" onClick={back}>
+            ←戻る
+          </a>
+        </h3>
         営みの街が暮れたら　色めき
         <br />
         風たちは運ぶわ　カラスと人々の群れ
@@ -202,7 +207,7 @@ const Head = styled.div`
   }
 
   .belt {
-    background-color: tomato;
+    background-color: #237ad1;
     color: #fff;
     height: 80px;
     font-size: 20px;
@@ -218,8 +223,10 @@ const Content = styled.div`
   ${p => animation(p.contentStartStyle)};
 `;
 
+// cubic-bezier(0.49, 1.26, 0.99, 0.99)
 const animation = (startStyle: any) => css`
-  animation: ${mykeyframe(startStyle)} 0.3s cubic-bezier(0.49, 1.26, 0.99, 0.99);
+  animation: ${mykeyframe(startStyle)} 0.6s
+    cubic-bezier(0.56, -0.23, 0.43, 1.34);
 `;
 const mykeyframe = (startStyle: any) =>
   keyframes({
