@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/" exact render={() => <PostsList />} />
-          <Route path="/:id" render={() => <PostsShow />} />
+          <Route path="/:id" render={props => <PostsShow {...props} />} />
         </Switch>
       </Router>
     </PositionContext.Provider>

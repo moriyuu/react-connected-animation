@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import { PositionContext } from "../contexts";
 
-export default function PostsShow() {
+export default function PostsShow(props) {
   const { getStart } = useContext(PositionContext);
 
   useEffect(() => scrollTo(0, 0));
@@ -194,16 +194,4 @@ const Content = styled.div`
 const animation = (startStyle: any) => css`
   animation: ${mykeyframe(startStyle)} 0.3s cubic-bezier(0.49, 1.26, 0.99, 0.99);
 `;
-const mykeyframe = (startStyle: any) => keyframes`
-  0% {
-    width: ${startStyle.width}px;
-    height: ${startStyle.height}px;
-    left: ${startStyle.x}px;
-    top: ${startStyle.y}px;
-    font-size: ${startStyle.fontSize}px;
-    padding: ${startStyle.padding};
-    margin: ${startStyle.margin};
-    opacity: ${startStyle.opacity};
-    max-height: ${startStyle.maxHeight};
-  }
-`;
+const mykeyframe = (startStyle: any) => keyframes({ "0%": { ...startStyle } });

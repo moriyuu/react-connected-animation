@@ -9,18 +9,18 @@ export default function PostsList() {
   const { setStart } = useContext(PositionContext);
   const click = e => {
     setStart("head", {
-      width: e.target.offsetWidth,
-      height: e.target.offsetHeight,
-      x: e.target.offsetLeft - window.pageXOffset,
-      y: e.target.offsetTop - window.pageYOffset
+      width: e.target.offsetWidth + "px",
+      height: e.target.offsetHeight + "px",
+      left: e.target.offsetLeft - window.pageXOffset + "px",
+      top: e.target.offsetTop - window.pageYOffset + "px"
     });
     setStart("title", {
-      fontSize: 18,
+      fontSize: "18px",
       padding: "16px"
     });
     setStart("belt", {
-      height: 40,
-      fontSize: 16,
+      height: "40px",
+      fontSize: "16px",
       padding: "0 16px"
     });
   };
